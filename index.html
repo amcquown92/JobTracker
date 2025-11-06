@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+    <script type="module" src="app.js"></script>
+</head>
+<body>
+    <form id="applicationForm">
+        <label>Company
+            <input type="text" id="company"/>
+        </label>
+        <label> Position
+            <input type="text" id="position"/>
+        </label>
+        <label for="status-select"> Status
+            <select name="status-select" id="status-select">
+                <option value="">Please choose an option--</option>
+                <option value="applied">Applied</option>
+                <option value="screening">Screening</option>
+                <option value="interview">Interview</option>
+                <option value="offer">Offer</option>
+                <option value="rejected">Rejected</option>
+            </select>
+        </label>
+        <label> Date Applied
+            <input type="date" id="date-applied"/>
+        </label>
+        <label> Job URL
+            <input type="url" id="job-url"/>
+        </label>
+        <label> Notes
+            <input type="text" id="job-notes"/>
+        </label>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="appContainer"></div>
+</body>
+</html>
