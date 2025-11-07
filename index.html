@@ -10,10 +10,10 @@
 <body>
     <form id="applicationForm">
         <label>Company
-            <input type="text" id="company"/>
+            <input type="text" id="company" required/>
         </label>
         <label> Position
-            <input type="text" id="position"/>
+            <input type="text" id="position" required/>
         </label>
         <label for="status-select"> Status
             <select name="status-select" id="status-select">
@@ -38,16 +38,21 @@
     </form>
     <div id="appContainer"></div>
     <table>
-        <tr>
-            <th>Company:</th>
-            <th>Position:</th>
-            <th>Status:</th>
-            <th>Date Applied:</th>
-            <th>URL:</th>
-            <th>Notes:</th>
-            <th>Created at:</th>
-            <th>Updated at:</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Company:</th>
+                <th>Position:</th>
+                <th>Status:</th>
+                <th>Date Applied:</th>
+                <th>URL:</th>
+                <th>Notes:</th>
+                <th>Created at:</th>
+                <th>Updated at:</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
     </table>
 </body>
 </html>
