@@ -3,20 +3,22 @@ const applicationForm = document.getElementById("applicationForm");
 //const jobApps = JSON.parse(localStorage.getItem("jobApps")) || [];
 const tableBody = document.getElementById("table-body");
 // Event Listeners
-applicationForm.addEventListener("submit", createJobApp);
+applicationForm.addEventListener("submit", createJob);
 tableBody.addEventListener('click', (event) => {
     if(event.target.classList.contains("delete-btn")){
-        deleteJobApp(event);
+        deleteJob(event);
+    } else if (event.target.classList.contains("edit-btn")) {
+        editJob(event)
     }
 });
 // Load Job Applications
-displayJobApps()
+displayJob()
 
 // CRUD Functions
-function createJobApp (event) {
+function createJob (event) {
     event.preventDefault();
     const jobApps = JSON.parse(localStorage.getItem("jobApps")) || [];
-    const jobApp = {
+    const job = {
         id: Date.now() + Math.random().toString(36).substring(2, 9),
         company: document.getElementById("company").value,
         position: document.getElementById("position").value,
@@ -27,27 +29,24 @@ function createJobApp (event) {
         createdAt: Date.now(),
         updatedAt: Date.now()
     };
-    jobApps.push(jobApp);
+    jobApps.push(job);
     console.log(jobApps);
     localStorage.setItem("jobApps", JSON.stringify(jobApps));
     applicationForm.reset();
-    displayJobApps();
+    displayJob();
 }
-function displayJobApps(){
+function displayJob(){
     tableBody.textContent = "";
     const storedJobApps = localStorage.getItem('jobApps')
     const jobAppObject = JSON.parse(storedJobApps);
     console.log(typeof jobAppObject)
-    jobAppObject.forEach (jobApp => {
+    jobAppObject.forEach (job => {
         const tr = document.createElement("tr");
-        Object.entries(jobApp).forEach(([key, value]) =>{
+        Object.entries(job).forEach(([key, value]) =>{
             const td = document.createElement("td");
             tr.classList = "job-item";
             console.log("Key:", key, "Value:", value);
-            // if (key === "id") return;
-            if (key === "id") {
-                td.classList = "job-id";
-            };
+            td.classList = `job-${key}`
             td.innerText = value == null ? "" : String(value);
             tr.appendChild(td);
             tableBody.appendChild(tr);
@@ -56,11 +55,15 @@ function displayJobApps(){
         deleteButton.innerText = "x";
         deleteButton.classList = " btn delete-btn";
         tr.appendChild(deleteButton);
+        const editButton = document.createElement("button")
+        editButton.innerText = "edit";
+        editButton.classList = " btn edit-btn";
+        tr.appendChild(editButton);
 
 
     });
 };
-function deleteJobApp(event){
+function deleteJob(event){
     console.log("delete!")
     const jobItem = event.target.closest(".job-item");
     const jobId = jobItem.querySelector(".job-id").textContent;
@@ -68,5 +71,17 @@ function deleteJobApp(event){
     const updatedJobs = jobApps.filter(job => job.id !== jobId);
     localStorage.setItem("jobApps", JSON.stringify(updatedJobs));
     console.log(updatedJobs);
-    displayJobApps();
+    displayJob();
 };
+
+function editJob(event){
+    const jobItem = event.target.closest(".job-item");
+    const jobId = jobItem.querySelector(".job-id").textContent;
+    dialog.showModal();
+//✅ Pre-fill the dialog fields with the job’s data
+//✅ Save the updated job back to localStorage
+//✅ Close the modal on cancel
+//✅ Clean up your displayJob() rendering
+};
+const dialog = document.querySelector("dialog");
+const submitEdit = document.querySelector("dialog button")

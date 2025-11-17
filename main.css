@@ -1,5 +1,10 @@
-import url('https://fonts.googleapis.com/css2?family=Calistoga&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Quattrocento:wght@400;700&family=Questrial&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Calistoga&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Quattrocento:wght@400;700&family=Questrial&display=swap');
+:root {
+    --font-heading: 'Calistoga', cursive;
+    --font-body: 'IBM Plex Sans', sans-serif;
+    --font-serif: 'Quattrocento', serif;
+    --font-modern: 'Questrial', sans-serif;
+}
 html {
-
+    font-family: var(--font-heading);
 }
