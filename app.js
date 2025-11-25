@@ -37,51 +37,96 @@ function createJob (event) {
 }
 function displayJob(){
     tableBody.textContent = "";
-    const storedJobApps = localStorage.getItem('jobApps')
-    const jobAppObject = JSON.parse(storedJobApps);
-    console.log(typeof jobAppObject)
-    jobAppObject.forEach (job => {
+    const jobApps = JSON.parse(localStorage.getItem('jobApps')) || [];
+    console.log("Loaded:", jobApps);
+    jobApps.forEach (job => {
+        console.log()
         const tr = document.createElement("tr");
-        Object.entries(job).forEach(([key, value]) =>{
+        tr.classList = "job-item";
+        //ID column
+        const tdId = document.createElement("td");
+        tdId.classList.add("job-id", "hidden");
+        tdId.innerText = job.id;
+        tr.appendChild(tdId);
+        
+        const fields = ["company", "position", "status", "dateApplied", "jobUrl", "notes", "createdAt", "updatedAt"];
+        fields.forEach(field => {
             const td = document.createElement("td");
-            tr.classList = "job-item";
-            console.log("Key:", key, "Value:", value);
-            td.classList = `job-${key}`
-            td.innerText = value == null ? "" : String(value);
+            td.classList.add(`job-${field}`);
+            td.innerText = job[field] ?? "";
+            if (field === "createdAt" || field === "updatedAt") td.classList.add("hidden");
             tr.appendChild(td);
-            tableBody.appendChild(tr);
         });
+
+        //Buttons
         const deleteButton = document.createElement("button")
         deleteButton.innerText = "x";
         deleteButton.classList = " btn delete-btn";
         tr.appendChild(deleteButton);
+
         const editButton = document.createElement("button")
         editButton.innerText = "edit";
         editButton.classList = " btn edit-btn";
         tr.appendChild(editButton);
-
-
+        tableBody.appendChild(tr);
     });
 };
 function deleteJob(event){
-    console.log("delete!")
     const jobItem = event.target.closest(".job-item");
-    const jobId = jobItem.querySelector(".job-id").textContent;
+    const jobId = jobItem.querySelector(".job-id").textContent.trim();
     const jobApps = JSON.parse(localStorage.getItem("jobApps")) || [];
     const updatedJobs = jobApps.filter(job => job.id !== jobId);
     localStorage.setItem("jobApps", JSON.stringify(updatedJobs));
-    console.log(updatedJobs);
     displayJob();
 };
 
 function editJob(event){
     const jobItem = event.target.closest(".job-item");
-    const jobId = jobItem.querySelector(".job-id").textContent;
+    const jobId = jobItem.querySelector(".job-id").textContent.trim();
+    const jobApps = JSON.parse(localStorage.getItem("jobApps")) || [];
+    const jobToEdit = jobApps.find(job => job.id === jobId) //this is reference to the 
+    console.log(jobToEdit)
+    console.log(jobApps)
+    if (!jobToEdit) return;
+
     dialog.showModal();
-//✅ Pre-fill the dialog fields with the job’s data
-//✅ Save the updated job back to localStorage
+    
+    //Pre-fill
+    document.getElementById("edit-id").append(` ${jobToEdit.id}`);
+    document.getElementById("edit-company").value = jobToEdit.company;
+    document.getElementById("edit-position").value = jobToEdit.position;
+    document.getElementById("edit-status-select").value = jobToEdit.status;
+    document.getElementById("edit-date-applied").value = jobToEdit.dateApplied;
+    document.getElementById("edit-job-url").value = jobToEdit.jobUrl;
+    document.getElementById("edit-job-notes").value = jobToEdit.notes;
+    document.getElementById("edit-created-at").append(` ${jobToEdit.createdAt}`);
+    document.getElementById("edit-updated-at").append(` ${jobToEdit.updatedAt}`);
+    
+    // Submit updated values
+    
+    const editForm = document.getElementById("edit-applicationForm");
+    
+    editForm.onsubmit = (e) => {
+        e.preventDefault();
+        // Assign new values to edited job
+        jobToEdit.company = document.getElementById("edit-company").value;
+        jobToEdit.position = document.getElementById("edit-position").value;
+        jobToEdit.status = document.getElementById("edit-status-select").value;
+        jobToEdit.dateApplied = document.getElementById("edit-date-applied").value;
+        jobToEdit.jobUrl = document.getElementById("edit-job-url").value;
+        jobToEdit.notes = document.getElementById("edit-job-notes").value;
+        jobToEdit.updatedAt = document.getElementById("edit-updated-at").value;
+        console.log(jobToEdit);
+        console.log(jobApps);
+        // set to storage
+        localStorage.setItem("jobApps", JSON.stringify(jobApps));
+        dialog.close();
+        displayJob();
+    };
+    //display
+    
 //✅ Close the modal on cancel
 //✅ Clean up your displayJob() rendering
 };
 const dialog = document.querySelector("dialog");
-const submitEdit = document.querySelector("dialog button")
+const submitEdit = document.querySelector("dialog button");
